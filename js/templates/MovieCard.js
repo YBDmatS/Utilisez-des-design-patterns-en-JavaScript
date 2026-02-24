@@ -1,20 +1,34 @@
 class MovieCard {
-    constructor(movie) {
-        this._movie = movie
+  constructor(movie, subject) {
+    this._movie = movie;
 
-        this.$wrapper = document.createElement('div')
-        this.$wrapper.classList.add('movie-card-wrapper')
-    }
+    this.$wrapper = document.createElement("div");
+    this.$wrapper.classList.add("movie-card-wrapper");
 
-    get movie() {
-        return this._movie
-    }
+    this.subject = subject;
+  }
 
-    handleWishButton() {
-    }
+  get movie() {
+    return this._movie;
+  }
 
-    createMovieCard() {
-        const movieCard = `
+  handleWishButton() {
+    this.$wrapper.addEventListener("click", (event) => {
+      const $wishBtn = this.$wrapper.getElementsByClassName("wish-btn")[0];
+      const isAddedToWishList = $wishBtn.classList.contains("wished");
+
+      if (isAddedToWishList) {
+        this.subject.notify(this, false);
+        $wishBtn.classList.remove("wished");
+      } else {
+        this.subject.notify(this, true);
+        $wishBtn.classList.add("wished");
+      }
+    });
+  }
+
+  createMovieCard() {
+    const movieCard = `
             <div class="movie-thumbnail center">
                 <img
                     alt="${this._movie.title}"
@@ -34,11 +48,11 @@ class MovieCard {
                 -
                 <span>${this._movie.duration}</span>
             </p>
-        `
-        
-        this.$wrapper.innerHTML = movieCard
-        this.handleWishButton()
+        `;
 
-        return this.$wrapper
-    }
+    this.$wrapper.innerHTML = movieCard;
+    this.handleWishButton();
+
+    return this.$wrapper;
+  }
 }
